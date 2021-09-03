@@ -1,7 +1,7 @@
 syntax = "proto3";
 package roomy_proto;
 
-option go_package = "roomy_proto/model";
+option go_package = "github.com/Suse-Orphanage/roomy-proto/model";
 
 service Thread {
     rpc GetThread (ThreadRequest) returns (ThreadResponse);
