@@ -1,0 +1,48 @@
+syntax = "proto3";
+package roomy_proto;
+
+import "google/protobuf/timestamp.proto";
+import "proto/thread.proto";
+
+option go_package = "roomy_proto/model";
+
+service Community {
+    rpc SearchUser (UserSearchRequest) returns (UserSearchResponse);
+    rpc CheckIn(CheckInRequest) returns (CheckInResponse);
+    rpc GetCheckInHistory(CheckInHistoryRequest) returns (CheckInHistoryResponse);
+}
+
+message UserSearchRequest {
+    string Keyword = 1;
+    enum SearchType {
+        Thread = 0;
+        User = 1;
+    }
+    SearchType Type = 2;
+}
+
+message UserSearchResponse {
+    repeated roomy_proto.ThreadResponse Threads = 16;
+    repeated uint64 Users = 17;
+}
+
+message CheckInRequest {
+    google.protobuf.Timestamp time = 1;
+}
+
+message CheckInResponse {
+    bool Success = 1;
+}
+
+message CheckInHistoryRequest {
+    google.protobuf.Timestamp TimeStart = 1;
+    google.protobuf.Timestamp TimeEnd = 2;
+}
+
+message CheckInHistoryResponse {
+    message CheckInHistory {
+        google.protobuf.Timestamp Date = 1;
+        bool CheckedIn = 2;
+    }
+    repeated CheckInHistory History = 1;
+}
