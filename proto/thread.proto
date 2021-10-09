@@ -1,5 +1,5 @@
 syntax = "proto3";
-package roomy_proto;
+package community;
 
 option go_package = "github.com/Suse-Orphanage/roomy-proto/model";
 

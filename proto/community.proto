@@ -1,5 +1,5 @@
 syntax = "proto3";
-package roomy_proto;
+package community;
 
 import "google/protobuf/timestamp.proto";
 import "proto/thread.proto";
@@ -22,7 +22,7 @@ message UserSearchRequest {
 }
 
 message UserSearchResponse {
-    repeated roomy_proto.ThreadResponse Threads = 16;
+    repeated community.ThreadResponse Threads = 16;
     repeated uint64 Users = 17;
 }
 
