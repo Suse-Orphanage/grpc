@@ -4,7 +4,7 @@ package community;
 import "google/protobuf/timestamp.proto";
 import "proto/thread.proto";
 
-option go_package = "github.com/Suse-Orphanage/roomy-proto/model";
+option go_package = "github.com/Suse-Orphanage/grpc";
 
 service Community {
     rpc SearchUser (UserSearchRequest) returns (UserSearchResponse);
