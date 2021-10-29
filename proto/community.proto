@@ -1,3 +1,7 @@
+// community.proto
+// this service provides a basic commnunity grcp service,
+// includes basic check-in and search user feature.
+
 syntax = "proto3";
 package community;
 
@@ -23,11 +27,12 @@ message UserSearchRequest {
 
 message UserSearchResponse {
     repeated community.ThreadResponse Threads = 16;
-    repeated uint64 Users = 17;
+    repeated User Users = 17;
 }
 
 message CheckInRequest {
     google.protobuf.Timestamp time = 1;
+    uint64 UserID = 2;
 }
 
 message CheckInResponse {
@@ -37,6 +42,7 @@ message CheckInResponse {
 message CheckInHistoryRequest {
     google.protobuf.Timestamp TimeStart = 1;
     google.protobuf.Timestamp TimeEnd = 2;
+    uint64 UserID = 3;
 }
 
 message CheckInHistoryResponse {
