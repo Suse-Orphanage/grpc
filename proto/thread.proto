@@ -112,6 +112,8 @@ message StarThreadResponse {
 
 message ThreadSearchRequest {
     string KeyWord = 1;
+    uint32 Page = 2;
+    int32 UserID = 3;
 }
 
 message ThreadSearchResponse {
