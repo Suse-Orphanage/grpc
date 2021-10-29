@@ -44,10 +44,11 @@ message Comment {
 }
 
 message User {
-    string Username = 1;
-	string Bio = 2;
-	bool IsPro = 3;
-	string Avatar = 4;
+    uint64 ID = 1;
+    string Username = 2;
+	string Bio = 3;
+	bool IsPro = 4;
+	string Avatar = 5;
 }
 
 message ThreadResponse {
