@@ -30,7 +30,7 @@ message ThreadRequest {
 message Reply {
     uint64 ID = 1;
     string Content = 2;
-    uint64 Author = 3;
+    User Author = 3;
     uint64 ReplyTo = 4;
 }
 
