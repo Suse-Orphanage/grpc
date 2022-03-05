@@ -20,8 +20,18 @@ service Thread {
     rpc StarThread (StarThreadRequest) returns (StarThreadResponse);
     rpc UnlikeThred (LikeThreadRequest) returns (LikeThreadResponse);
     rpc UnstarThread (StarThreadRequest) returns (StarThreadResponse);
+    rpc GetStaredThreads (StaredThreadRequest) returns (StaredThreadResponse);
 
     rpc SearchThread (ThreadSearchRequest) returns (ThreadSearchResponse);
+}
+
+message StaredThreadRequest {
+    uint64 UserID = 1;
+}
+
+message StaredThreadResponse {
+    uint64 Count = 1;
+    repeated ThreadResponse Threads = 2;
 }
 
 message FeedRequest {

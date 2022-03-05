@@ -29,6 +29,7 @@ type ThreadClient interface {
 	StarThread(ctx context.Context, in *StarThreadRequest, opts ...grpc.CallOption) (*StarThreadResponse, error)
 	UnlikeThred(ctx context.Context, in *LikeThreadRequest, opts ...grpc.CallOption) (*LikeThreadResponse, error)
 	UnstarThread(ctx context.Context, in *StarThreadRequest, opts ...grpc.CallOption) (*StarThreadResponse, error)
+	GetStaredThreads(ctx context.Context, in *StaredThreadRequest, opts ...grpc.CallOption) (*StaredThreadResponse, error)
 	SearchThread(ctx context.Context, in *ThreadSearchRequest, opts ...grpc.CallOption) (*ThreadSearchResponse, error)
 }
 
@@ -139,6 +140,15 @@ func (c *threadClient) UnstarThread(ctx context.Context, in *StarThreadRequest, 
 	return out, nil
 }
 
+func (c *threadClient) GetStaredThreads(ctx context.Context, in *StaredThreadRequest, opts ...grpc.CallOption) (*StaredThreadResponse, error) {
+	out := new(StaredThreadResponse)
+	err := c.cc.Invoke(ctx, "/community.Thread/GetStaredThreads", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *threadClient) SearchThread(ctx context.Context, in *ThreadSearchRequest, opts ...grpc.CallOption) (*ThreadSearchResponse, error) {
 	out := new(ThreadSearchResponse)
 	err := c.cc.Invoke(ctx, "/community.Thread/SearchThread", in, out, opts...)
@@ -163,6 +173,7 @@ type ThreadServer interface {
 	StarThread(context.Context, *StarThreadRequest) (*StarThreadResponse, error)
 	UnlikeThred(context.Context, *LikeThreadRequest) (*LikeThreadResponse, error)
 	UnstarThread(context.Context, *StarThreadRequest) (*StarThreadResponse, error)
+	GetStaredThreads(context.Context, *StaredThreadRequest) (*StaredThreadResponse, error)
 	SearchThread(context.Context, *ThreadSearchRequest) (*ThreadSearchResponse, error)
 	mustEmbedUnimplementedThreadServer()
 }
@@ -203,6 +214,9 @@ func (UnimplementedThreadServer) UnlikeThred(context.Context, *LikeThreadRequest
 }
 func (UnimplementedThreadServer) UnstarThread(context.Context, *StarThreadRequest) (*StarThreadResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UnstarThread not implemented")
+}
+func (UnimplementedThreadServer) GetStaredThreads(context.Context, *StaredThreadRequest) (*StaredThreadResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetStaredThreads not implemented")
 }
 func (UnimplementedThreadServer) SearchThread(context.Context, *ThreadSearchRequest) (*ThreadSearchResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchThread not implemented")
@@ -418,6 +432,24 @@ func _Thread_UnstarThread_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Thread_GetStaredThreads_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StaredThreadRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ThreadServer).GetStaredThreads(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/community.Thread/GetStaredThreads",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ThreadServer).GetStaredThreads(ctx, req.(*StaredThreadRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Thread_SearchThread_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ThreadSearchRequest)
 	if err := dec(in); err != nil {
@@ -486,6 +518,10 @@ var Thread_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UnstarThread",
 			Handler:    _Thread_UnstarThread_Handler,
+		},
+		{
+			MethodName: "GetStaredThreads",
+			Handler:    _Thread_GetStaredThreads_Handler,
 		},
 		{
 			MethodName: "SearchThread",
