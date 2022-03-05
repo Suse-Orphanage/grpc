@@ -18,6 +18,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ThreadClient interface {
+	GetFeed(ctx context.Context, in *FeedRequest, opts ...grpc.CallOption) (*FeedResponse, error)
+	GetRecommand(ctx context.Context, in *RecommandRequest, opts ...grpc.CallOption) (*RecommandResponse, error)
 	GetThread(ctx context.Context, in *ThreadRequest, opts ...grpc.CallOption) (*ThreadResponse, error)
 	GetReply(ctx context.Context, in *ThreadRequest, opts ...grpc.CallOption) (*ThreadResponse, error)
 	NewThread(ctx context.Context, in *NewThreadRequest, opts ...grpc.CallOption) (*ThreadResponse, error)
@@ -36,6 +38,24 @@ type threadClient struct {
 
 func NewThreadClient(cc grpc.ClientConnInterface) ThreadClient {
 	return &threadClient{cc}
+}
+
+func (c *threadClient) GetFeed(ctx context.Context, in *FeedRequest, opts ...grpc.CallOption) (*FeedResponse, error) {
+	out := new(FeedResponse)
+	err := c.cc.Invoke(ctx, "/community.Thread/GetFeed", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *threadClient) GetRecommand(ctx context.Context, in *RecommandRequest, opts ...grpc.CallOption) (*RecommandResponse, error) {
+	out := new(RecommandResponse)
+	err := c.cc.Invoke(ctx, "/community.Thread/GetRecommand", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *threadClient) GetThread(ctx context.Context, in *ThreadRequest, opts ...grpc.CallOption) (*ThreadResponse, error) {
@@ -132,6 +152,8 @@ func (c *threadClient) SearchThread(ctx context.Context, in *ThreadSearchRequest
 // All implementations must embed UnimplementedThreadServer
 // for forward compatibility
 type ThreadServer interface {
+	GetFeed(context.Context, *FeedRequest) (*FeedResponse, error)
+	GetRecommand(context.Context, *RecommandRequest) (*RecommandResponse, error)
 	GetThread(context.Context, *ThreadRequest) (*ThreadResponse, error)
 	GetReply(context.Context, *ThreadRequest) (*ThreadResponse, error)
 	NewThread(context.Context, *NewThreadRequest) (*ThreadResponse, error)
@@ -149,6 +171,12 @@ type ThreadServer interface {
 type UnimplementedThreadServer struct {
 }
 
+func (UnimplementedThreadServer) GetFeed(context.Context, *FeedRequest) (*FeedResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFeed not implemented")
+}
+func (UnimplementedThreadServer) GetRecommand(context.Context, *RecommandRequest) (*RecommandResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRecommand not implemented")
+}
 func (UnimplementedThreadServer) GetThread(context.Context, *ThreadRequest) (*ThreadResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetThread not implemented")
 }
@@ -190,6 +218,42 @@ type UnsafeThreadServer interface {
 
 func RegisterThreadServer(s grpc.ServiceRegistrar, srv ThreadServer) {
 	s.RegisterService(&Thread_ServiceDesc, srv)
+}
+
+func _Thread_GetFeed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FeedRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ThreadServer).GetFeed(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/community.Thread/GetFeed",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ThreadServer).GetFeed(ctx, req.(*FeedRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Thread_GetRecommand_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RecommandRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ThreadServer).GetRecommand(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/community.Thread/GetRecommand",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ThreadServer).GetRecommand(ctx, req.(*RecommandRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Thread_GetThread_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -379,6 +443,14 @@ var Thread_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "community.Thread",
 	HandlerType: (*ThreadServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetFeed",
+			Handler:    _Thread_GetFeed_Handler,
+		},
+		{
+			MethodName: "GetRecommand",
+			Handler:    _Thread_GetRecommand_Handler,
+		},
 		{
 			MethodName: "GetThread",
 			Handler:    _Thread_GetThread_Handler,
