@@ -7,6 +7,9 @@ package community;
 option go_package = "github.com/Suse-Orphanage/grpc";
 
 service Thread {
+    rpc GetFeed (FeedRequest) returns (FeedResponse);
+    rpc GetRecommand (RecommandRequest) returns (RecommandResponse);
+
     rpc GetThread (ThreadRequest) returns (ThreadResponse);
     rpc GetReply (ThreadRequest) returns (ThreadResponse);
     rpc NewThread (NewThreadRequest) returns (ThreadResponse);
@@ -21,10 +24,26 @@ service Thread {
     rpc SearchThread (ThreadSearchRequest) returns (ThreadSearchResponse);
 }
 
+message FeedRequest {
+    uint64 UserID = 1;
+}
+
+message FeedResponse {
+    repeated ThreadResponse Threads = 1;
+}
+
+message RecommandRequest {
+    uint64 UserID = 1;
+}
+
+message RecommandResponse {
+    repeated ThreadResponse Threads = 1;
+}
+
 message ThreadRequest {
     uint64 ThreadID = 1;
     uint64 UserID = 2;
-    optional uint64 Page = 16;
+    uint64 Page = 16;
 }
 
 message Reply {
