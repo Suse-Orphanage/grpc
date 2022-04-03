@@ -82,6 +82,9 @@ message User {
 	string Bio = 3;
 	bool IsPro = 4;
 	string Avatar = 5;
+    uint64 FollowingsCount = 6;
+    uint64 FollowersCount = 7;
+    string Status = 8;
 }
 
 message ThreadResponse {
