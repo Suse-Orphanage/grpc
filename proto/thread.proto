@@ -4,6 +4,8 @@
 syntax = "proto3";
 package community;
 
+import "google/protobuf/timestamp.proto";
+
 option go_package = "github.com/Suse-Orphanage/grpc";
 
 service Thread {
@@ -61,6 +63,7 @@ message Reply {
     string Content = 2;
     User Author = 3;
     uint64 ReplyTo = 4;
+    google.protobuf.Timestamp Time = 5;
 }
 
 message Comment {
@@ -69,7 +72,8 @@ message Comment {
     User Author = 3;
     uint32 Likes = 4;
     bool LikedByMe = 5;
-    repeated Reply Replies = 6;
+    google.protobuf.Timestamp Time = 6;
+    repeated Reply Replies = 7;
 }
 
 message User {
@@ -91,7 +95,9 @@ message ThreadResponse {
     bool StaredByMe = 7;
     bool LikedByMe = 8;
 
-    repeated Comment Comments = 9;
+    google.protobuf.Timestamp Time = 9;
+
+    repeated Comment Comments = 10;
 }
 
 message NewThreadRequest {
