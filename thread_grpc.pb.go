@@ -27,7 +27,7 @@ type ThreadClient interface {
 	DeleteThread(ctx context.Context, in *DeleteThreadRequest, opts ...grpc.CallOption) (*DeleteThreadResponse, error)
 	LikeThred(ctx context.Context, in *LikeThreadRequest, opts ...grpc.CallOption) (*LikeThreadResponse, error)
 	StarThread(ctx context.Context, in *StarThreadRequest, opts ...grpc.CallOption) (*StarThreadResponse, error)
-	UnlikeThred(ctx context.Context, in *LikeThreadRequest, opts ...grpc.CallOption) (*LikeThreadResponse, error)
+	UnlikeThread(ctx context.Context, in *LikeThreadRequest, opts ...grpc.CallOption) (*LikeThreadResponse, error)
 	UnstarThread(ctx context.Context, in *StarThreadRequest, opts ...grpc.CallOption) (*StarThreadResponse, error)
 	GetStaredThreads(ctx context.Context, in *StaredThreadRequest, opts ...grpc.CallOption) (*StaredThreadResponse, error)
 	SearchThread(ctx context.Context, in *ThreadSearchRequest, opts ...grpc.CallOption) (*ThreadSearchResponse, error)
@@ -122,9 +122,9 @@ func (c *threadClient) StarThread(ctx context.Context, in *StarThreadRequest, op
 	return out, nil
 }
 
-func (c *threadClient) UnlikeThred(ctx context.Context, in *LikeThreadRequest, opts ...grpc.CallOption) (*LikeThreadResponse, error) {
+func (c *threadClient) UnlikeThread(ctx context.Context, in *LikeThreadRequest, opts ...grpc.CallOption) (*LikeThreadResponse, error) {
 	out := new(LikeThreadResponse)
-	err := c.cc.Invoke(ctx, "/community.Thread/UnlikeThred", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/community.Thread/UnlikeThread", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -171,7 +171,7 @@ type ThreadServer interface {
 	DeleteThread(context.Context, *DeleteThreadRequest) (*DeleteThreadResponse, error)
 	LikeThred(context.Context, *LikeThreadRequest) (*LikeThreadResponse, error)
 	StarThread(context.Context, *StarThreadRequest) (*StarThreadResponse, error)
-	UnlikeThred(context.Context, *LikeThreadRequest) (*LikeThreadResponse, error)
+	UnlikeThread(context.Context, *LikeThreadRequest) (*LikeThreadResponse, error)
 	UnstarThread(context.Context, *StarThreadRequest) (*StarThreadResponse, error)
 	GetStaredThreads(context.Context, *StaredThreadRequest) (*StaredThreadResponse, error)
 	SearchThread(context.Context, *ThreadSearchRequest) (*ThreadSearchResponse, error)
@@ -209,8 +209,8 @@ func (UnimplementedThreadServer) LikeThred(context.Context, *LikeThreadRequest) 
 func (UnimplementedThreadServer) StarThread(context.Context, *StarThreadRequest) (*StarThreadResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StarThread not implemented")
 }
-func (UnimplementedThreadServer) UnlikeThred(context.Context, *LikeThreadRequest) (*LikeThreadResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UnlikeThred not implemented")
+func (UnimplementedThreadServer) UnlikeThread(context.Context, *LikeThreadRequest) (*LikeThreadResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnlikeThread not implemented")
 }
 func (UnimplementedThreadServer) UnstarThread(context.Context, *StarThreadRequest) (*StarThreadResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UnstarThread not implemented")
@@ -396,20 +396,20 @@ func _Thread_StarThread_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Thread_UnlikeThred_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Thread_UnlikeThread_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LikeThreadRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ThreadServer).UnlikeThred(ctx, in)
+		return srv.(ThreadServer).UnlikeThread(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/community.Thread/UnlikeThred",
+		FullMethod: "/community.Thread/UnlikeThread",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ThreadServer).UnlikeThred(ctx, req.(*LikeThreadRequest))
+		return srv.(ThreadServer).UnlikeThread(ctx, req.(*LikeThreadRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -512,8 +512,8 @@ var Thread_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Thread_StarThread_Handler,
 		},
 		{
-			MethodName: "UnlikeThred",
-			Handler:    _Thread_UnlikeThred_Handler,
+			MethodName: "UnlikeThread",
+			Handler:    _Thread_UnlikeThread_Handler,
 		},
 		{
 			MethodName: "UnstarThread",

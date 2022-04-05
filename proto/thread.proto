@@ -20,7 +20,7 @@ service Thread {
 
     rpc LikeThred (LikeThreadRequest) returns (LikeThreadResponse);
     rpc StarThread (StarThreadRequest) returns (StarThreadResponse);
-    rpc UnlikeThred (LikeThreadRequest) returns (LikeThreadResponse);
+    rpc UnlikeThread (LikeThreadRequest) returns (LikeThreadResponse);
     rpc UnstarThread (StarThreadRequest) returns (StarThreadResponse);
     rpc GetStaredThreads (StaredThreadRequest) returns (StaredThreadResponse);
 
